@@ -1,6 +1,7 @@
 package com.codegen;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -13,7 +14,7 @@ public class SeqModel {
     private List<Layer> layers = new ArrayList<>();
     private List<String> dependencies = new ArrayList<>();
 
-    public SeqModel(JSONObject seqModel, String modelName) {
+    public SeqModel(JSONObject seqModel, String modelName) throws JSONException {
         this.modelName = modelName;
         loss = seqModel.getString("loss");
         optimizer = seqModel.getString("optimizer");

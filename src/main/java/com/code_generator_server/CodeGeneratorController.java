@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.codegen.SeqModel;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
@@ -27,12 +28,24 @@ public class CodeGeneratorController {
 
     @RequestMapping(value = "/greeting", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    String generateCode(HttpServletRequest request) throws IOException {
+    String generateCode(HttpServletRequest request) throws IOException, JSONException {
         ServletInputStream stream = request.getInputStream();
         String body = IOUtils.toString(stream);
         SeqModel model = new SeqModel(new JSONObject(body), "model");
 
         return model.toCode();
+    }
+
+    @GetMapping("/first/page")
+    String sampleView()
+    {
+        return "static_sample";
+    }
+
+    @GetMapping("/model")
+    String model()
+    {
+        return "model_page";
     }
 
 }

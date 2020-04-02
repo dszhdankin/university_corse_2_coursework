@@ -7,7 +7,7 @@ public class DenseLayer extends Layer {
     String activation;
     Integer units;
 
-    public DenseLayer(JSONObject layer, String layerName) {
+    public DenseLayer(JSONObject layer, String layerName) throws JSONException {
         this.layerName = layerName;
         this.units = layer.getInt("units");
         if (layer.has("input_shape"))

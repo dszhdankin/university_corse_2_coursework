@@ -4,63 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Untitled</title>
-    <style>
+    <link rel="stylesheet" type="text/css" href="/model/model_style.css">
+    <script src="/lib/jquery.js"></script>
+    <script src="/lib/jquery-ui.js"></script>
+    <script src="/lib/draw2d.js"></script>
+    <script type="text/javascript">
+        var canvas = null;
+        document.addEventListener("DOMContentLoaded", function () {
+            canvas = new draw2d.Canvas("drawing_place");
+            let start  = new draw2d.shape.node.Start({x:0,y:0,width:60,height:60});
+            let end    = new draw2d.shape.node.End({x:450,y:250});
+            canvas.add(start);
+            canvas.add(end);
 
-        /*Placeholding header*/
-        .header {
-            background-color: #f1f1f1;
-            padding: 20px;
-            text-align: center;
-        }
-
-        /*Placeholding navigation*/
-        .navigation {
-            overflow: hidden;
-            background-color: royalblue;
-        }
-
-        /*Navigation links*/
-        .navigation a {
-            float: left;
-            display: block;
-            color: aliceblue;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        .navigation a:hover {
-            background-color: #333333;
-            color: #dddddd;
-        }
-
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /*Editor columns*/
-        .column {
-            padding: 10px;
-            float: left;
-        }
-
-        .side_menu {
-            width: 15%;
-            background-color: blueviolet;
-        }
-
-        .drawing_space {
-            width: 80%;
-            background-color: crimson;
-        }
-
-        .layer {
-
-        }
-
-    </style>
+        })
+    </script>
 </head>
 <body>
     <div class="header"> Header </div>
@@ -68,7 +26,7 @@
         <a href="#">Data</a>
         <a href="#">Model</a>
     </div>
-    <div class="row">
+    <div class="grid_layout">
         <div class="column side_menu">
             <div class="layer dense" draggable="true">
                 <p> Dense </p>
@@ -83,25 +41,8 @@
                 <p> Flatten </p>
             </div>
         </div>
-        <div class="column drawing_space">
-            <p>
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-                Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick Dick
-            </p>
+        <div class="column drawing_space" id="drawing_place">
+
         </div>
     </div>
 </body>

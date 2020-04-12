@@ -1,8 +1,6 @@
 package com.code_generator_server;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,10 +10,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.sortBySpecificity;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -47,5 +47,27 @@ public class CodeGeneratorController {
     {
         return "model_page";
     }
+
+    @GetMapping("/model/model_style.css")
+    @ResponseBody
+    byte[] modelStyle() throws IOException {
+        File file = ResourceUtils.getFile("classpath:templates/model_style.css");
+        FileInputStream stream = new FileInputStream(file);
+        byte[] res = IOUtils.toByteArray(stream);
+        stream.close();
+        return res;
+    }
+
+    @GetMapping("/lib/{filename}")
+    @ResponseBody
+    byte[] getLib(@PathVariable String filename) throws IOException {
+        File file = ResourceUtils.getFile("classpath:templates/lib/" + filename);
+        FileInputStream stream = new FileInputStream(file);
+        byte[] res = IOUtils.toByteArray(stream);
+        stream.close();
+        return res;
+    }
+
+
 
 }

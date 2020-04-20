@@ -1,0 +1,33 @@
+/*Placeholding header*/
+.header {
+  background-color: #f1f1f1;
+  padding: 20px;
+  text-align: center;
+}
+
+/*Placeholding navigation*/
+.navigation {
+  overflow: hidden;
+  background-color: royalblue;
+}
+
+/*Navigation links*/
+.navigation a {
+  float: left;
+  display: block;
+  color: aliceblue;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/*iframe*/
+iframe[name="frame"] {
+  display: block;
+  width: 100%;
+}
+
+.navigation a:hover {
+  background-color: #333333;
+  color: #dddddd;
+}

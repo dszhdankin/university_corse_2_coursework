@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hyper parameters</title>
+    <style type="text/css">
+      .grid_container {
+        display: grid;
+        height: 1000px;
+        grid-template-columns: 33% 33% 33%;
+        grid-template-rows: 33% 33% 33%;
+        background-image: url("/css/background_drak.jpg");
+        font-family: Arial;
+        color: #6b6b6b;
+      }
+      .form_container {
+        background-color: #a3cae0;
+      }
+      .form_inside {
+        margin-left: 20%;
+        margin-right: 20%;
+        margin-top: 10%;
+      }
+    </style>
+</head>
+<body>
+  <div class="grid_container">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div class="form_container">
+      <form class="form_inside">
+        <label for="epochs">Number of epochs</label>
+        <input type="text" id="epochs" name="epochs">
+        <br><br><br>
+        <label for="batch">Batch size</label>
+        <input type="text" id="batch" name="batch">
+        <br><br><br>
+        <label for="loss">Loss function</label>
+        <select id="loss" name="loss">
+          <option value="binary_crossentropy">binary_crossentropy</option>
+          <option value="categorical_crossentropy">categorical_crossentropy</option>
+          <option value="sparse_categorical_crossentropy">sparse_categorical_crossentropy</option>
+          <option value="kullback_leibler_divergence">kullback_leibler_divergence</option>
+        </select>
+        <br><br><br>
+        <label for="optimizer">Optimizer</label>
+        <select id="optimizer" name="optimizer">
+          <option value="sgd">SGD</option>
+          <option value="rmsprop">RMSprop</option>
+          <option value="adgard">Adgard</option>
+          <option value="adam">Adam</option>
+          <option value="adadelta">Adadelta</option>
+          <option value="adamax">Adamax</option>
+          <option value="nadam">Nadam</option>
+        </select>
+        <br><br><br>
+        <button id="save_button">Save</button>
+      </form>
+    </div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</body>
+</html>

@@ -36,22 +36,22 @@ public class CodeGeneratorController {
         return model.toCode();
     }
 
-    @GetMapping("/first/page")
-    String sampleView()
+    @GetMapping("/main_page.html")
+    String main_page()
     {
-        return "static_sample";
+        return "main_page";
     }
 
-    @GetMapping("/model")
-    String model()
-    {
-        return "model_page";
+    @GetMapping("/navigation_page/{pageName}")
+    String navigation_page(@PathVariable String pageName) {
+        pageName = pageName.split("\\.")[0];
+        return pageName;
     }
 
-    @GetMapping("/model/model_style.css")
+    @GetMapping("/css/{filename}")
     @ResponseBody
-    byte[] modelStyle() throws IOException {
-        File file = ResourceUtils.getFile("classpath:templates/model_style.css");
+    byte[] modelStyle(@PathVariable String filename) throws IOException {
+        File file = ResourceUtils.getFile("classpath:static/css/" + filename);
         FileInputStream stream = new FileInputStream(file);
         byte[] res = IOUtils.toByteArray(stream);
         stream.close();
@@ -61,13 +61,21 @@ public class CodeGeneratorController {
     @GetMapping("/lib/{filename}")
     @ResponseBody
     byte[] getLib(@PathVariable String filename) throws IOException {
-        File file = ResourceUtils.getFile("classpath:templates/lib/" + filename);
+        File file = ResourceUtils.getFile("classpath:static/lib/" + filename);
         FileInputStream stream = new FileInputStream(file);
         byte[] res = IOUtils.toByteArray(stream);
         stream.close();
         return res;
     }
 
-
+    @GetMapping("/gui/{filename}")
+    @ResponseBody
+    byte[] getGui(@PathVariable String filename) throws IOException {
+        File file = ResourceUtils.getFile("classpath:static/gui/" + filename);
+        FileInputStream stream = new FileInputStream(file);
+        byte[] res = IOUtils.toByteArray(stream);
+        stream.close();
+        return res;
+    }
 
 }

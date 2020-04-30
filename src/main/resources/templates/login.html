@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log in</title>
+    <style type="text/css">
+        .header {
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+        }
+        form {
+            margin-left: 35%;
+            margin-right: 35%;
+            margin-top: 14%;
+            border-color: aqua;
+            border-style: groove;
+        }
+        input {
+            margin: 12px;
+            display: block;
+            height: 40px;
+            width: 500px;
+            font-size: 20px;
+        }
+        label {
+            margin: 12px;
+            display: block;
+            font-size: 25px;
+            font-family: Arial;
+        }
+        a {
+            margin: 12px;
+            display: block;
+            font-size: 25px;
+            font-family: Arial;
+        }
+        #content {
+            height: 2000px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header"> Neural Network Visual Creator </div>
+    <div id = "content">
+        <form id="form" method="post" action="/login">
+            <label for="username">Username</label>
+            <input class="field" id="username" name="username" type="text">
+            <br><br><br>
+            <label for="password">Password</label>
+            <input class="field" id="password" name="password" type="password">
+            <br><br>
+            <a href="/register.html">Create an account</a>
+            <br><br>
+            <input class="submit" type="submit" value="Log in">
+        </form>
+    </div>
+</body>
+</html>

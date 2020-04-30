@@ -22,6 +22,7 @@
         margin-top: 10%;
       }
     </style>
+    <script src="/lib/jquery.js"></script>
 </head>
 <body>
   <div class="grid_container">
@@ -32,10 +33,10 @@
     <div class="form_container">
       <form class="form_inside">
         <label for="epochs">Number of epochs</label>
-        <input type="text" id="epochs" name="epochs">
+        <input type="text" id="epochs" name="epochs" value="32">
         <br><br><br>
         <label for="batch">Batch size</label>
-        <input type="text" id="batch" name="batch">
+        <input type="text" id="batch" name="batch" value="32">
         <br><br><br>
         <label for="loss">Loss function</label>
         <select id="loss" name="loss">
@@ -64,5 +65,41 @@
     <div></div>
     <div></div>
   </div>
+  <script type="text/javascript">
+    $.ajax({
+      dataType: "json",
+      url: window.location.origin + "/download_hyper_parameters",
+      async: true,
+      success: function (data) {
+        $("#epochs")[0].value = data.epochs.toString();
+        $("#batch")[0].value = data.batch.toString();
+        $("#loss")[0].value = data.loss;
+        $("#optimizer")[0].value = data.optimizer;
+      }
+    });
+    $("#save_button").click(function (event) {
+      event.preventDefault();
+      let res = {};
+      let epochs = parseInt($("#epochs")[0].value);
+      let batch = parseInt($("#batch")[0].value);
+      let loss = $("#loss")[0].value;
+      let optimizer = $("#optimizer")[0].value;
+      if (isNaN(epochs) || isNaN(batch))
+        alert("Number of epochs and batch size should be specified!");
+      res.epochs = epochs;
+      res.batch = batch;
+      res.loss = loss;
+      res.optimizer = optimizer;
+      let siteRoot = window.location.origin;
+      $.ajax({
+        url: siteRoot + "/upload_hyper_parameters",
+        type: "POST",
+        data: JSON.stringify(res),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: true
+      });
+    });
+  </script>
 </body>
 </html>

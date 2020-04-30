@@ -24,8 +24,8 @@
  <script type="text/javascript">
 
 document.addEventListener("DOMContentLoaded",function () {
-
      var app  = new example.Application();
+     example.siteRoot = window.location.origin;
      app.view.installEditPolicy(  new draw2d.policy.connection.DragConnectionCreatePolicy({
         createConnection: function() {
             let connection = new draw2d.Connection({
@@ -36,6 +36,14 @@ document.addEventListener("DOMContentLoaded",function () {
             return connection;
         }
       }));
+     $.ajax({
+         dataType: "json",
+         url: example.siteRoot + "/download_layers",
+         async: true,
+         success: function (data) {
+             app.view.drawServerLayers(data);
+         }
+     })
 });
 
 </script>

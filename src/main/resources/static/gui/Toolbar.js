@@ -73,8 +73,21 @@ example.Toolbar = Class.extend({
             this.saveButton = $("<button>Save</button>");
             this.html.append(this.saveButton);
             this.saveButton.button().click($.proxy(function () {
-          console.log(this.layersJSONArrays());
-        }, this));
+                let requestData = this.layersJSONArrays();
+                if (requestData === null) {
+                    alert("Only sequential api is supported. " +
+                        "Their should be no more than one connection to each port!");
+                } else {
+                    $.ajax({
+                        url: example.siteRoot + "/upload_layers",
+                        type: "POST",
+                        data: requestData,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: true
+                    });
+                }
+            }  , this));
 	},
 
 	/**
@@ -153,6 +166,10 @@ example.Toolbar = Class.extend({
   layersJSONArrays: function() {
     let result = [];
     let ports = this.view.getAllPorts();
+    for (let i = 0; i < ports.getSize(); i++) {
+        if (ports.get(i).getConnections().getSize() > 1)
+            return null;
+    }
     for (let i = 0; i < ports.getSize(); i++) {
       let port = ports.get(i);
       if (!port.layerNode.visited) {

@@ -3,8 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Results</title>
+    <script src="/lib/jquery.js"></script>
 </head>
 <body>
-  <button>Download JSON</button>
+    <button id="download_button"> Download JSON </button>
+    <div id="content"></div>
+    <script type="text/javascript">
+        $("#download_button").click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                dataType: "json",
+                url: window.location.origin + "/download_json",
+                async: true,
+                success: function (data) {
+                    console.log(data);
+                    $("#content")[0].innerHTML = JSON.stringify(data);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

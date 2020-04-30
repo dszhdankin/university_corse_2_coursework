@@ -44,12 +44,51 @@ example.View = draw2d.Canvas.extend({
         var type = $(droppedDomNode).data("shape");
         var figure = new example.Layer();
         figure.setType(type);
-        var inputPort = figure.inputPort;
-        var outputPort = figure.outputPort;
-        var self = this;
         // create a command for the undo/redo support
         var command = new draw2d.command.CommandAdd(this, figure, x, y);
         this.getCommandStack().execute(command);
+    },
+
+    drawServerLayers : function (serverLayers) {
+        var self = this;
+        let figures = [];
+        serverLayers.forEach(function (value) {
+            for (let i = 0; i < value.length; i++) {
+                let cur = value[i];
+                if (cur.type === "dense") {
+                    let figure = new example.Layer();
+                    figure.setType(cur.type);
+                    figure.layerData.units = cur.units;
+                    figure.layerData.activation = cur.activation;
+                    let command = new draw2d.command.CommandAdd(self, figure, cur.x, cur.y);
+                    self.getCommandStack().execute(command);
+                    figures.push(figure);
+                } else if (cur.type === "dropout") {
+                    let figure = new example.Layer();
+                    figure.setType(cur.type);
+                    figure.layerData.fractionToDrop = cur.fraction;
+                    let command = new draw2d.command.CommandAdd(self, figure, cur.x, cur.y);
+                    self.getCommandStack().execute(command);
+                    figures.push(figure);
+                } else {
+                    let figure = new example.Layer();
+                    figure.setType(cur.type);
+                    let command = new draw2d.command.CommandAdd(self, figure, cur.x, cur.y);
+                    self.getCommandStack().execute(command);
+                    figures.push(figure);
+                }
+            }
+            for (let i = 1; i < value.length; i++) {
+                let connection = new draw2d.Connection({
+                    router: new draw2d.layout.connection.InteractiveManhattanConnectionRouter(),
+                    radius: 5,
+                    stroke: 1.35
+                });
+                connection.setSource(figures[i - 1].getPort("output"));
+                connection.setTarget(figures[i].getPort("input"));
+                self.add(connection);
+            }
+        });
     }
 });
 

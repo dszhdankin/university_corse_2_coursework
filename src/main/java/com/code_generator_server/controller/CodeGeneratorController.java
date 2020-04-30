@@ -1,13 +1,18 @@
-package com.code_generator_server;
+package com.code_generator_server.controller;
 
 import java.io.*;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.code_generator_server.entity.User;
+import com.code_generator_server.service.UserService;
 import com.codegen.SeqModel;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
@@ -22,18 +27,17 @@ import org.springframework.hateoas.EntityModel;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Controller
 public class CodeGeneratorController {
 
-    @RequestMapping(value = "/greeting", method = RequestMethod.POST, consumes = "application/json")
-    @ResponseBody
-    String generateCode(HttpServletRequest request) throws IOException, JSONException {
-        ServletInputStream stream = request.getInputStream();
-        String body = IOUtils.toString(stream);
-        SeqModel model = new SeqModel(new JSONObject(body), "model");
+    @Autowired
+    UserService service;
 
-        return model.toCode();
+    @GetMapping("/")
+    String site() {
+        return "redirect:/main_page.html";
     }
 
     @GetMapping("/main_page.html")
@@ -46,6 +50,58 @@ public class CodeGeneratorController {
     String navigation_page(@PathVariable String pageName) {
         pageName = pageName.split("\\.")[0];
         return pageName;
+    }
+
+    @GetMapping("/register.html")
+    String registerPage() {
+        return "register";
+    }
+
+    @PostMapping("/register.html")
+    String handleRegistry(@ModelAttribute("user") @Valid User user) {
+        service.saveUser(user);
+        return "redirect:/";
+    }
+
+    @PostMapping("/upload_layers")
+    @ResponseBody
+    String handleLayers(HttpEntity<String> httpEntity, Principal principal) {
+        String layers = httpEntity.getBody();
+        service.updateLayers(principal, layers);
+        return "";
+    }
+
+    @PostMapping("/upload_hyper_parameters")
+    @ResponseBody
+    String handleHyperParameters(HttpEntity<String> httpEntity, Principal principal) {
+        String hyperParameters = httpEntity.getBody();
+        service.updateHyperParameters(principal, hyperParameters);
+        return "";
+    }
+
+    @GetMapping("/download_json")
+    @ResponseBody
+    String getModelJSON(Principal principal) {
+        User user = (User) service.loadUserByUsername(principal.getName());
+        JSONObject res = new JSONObject(user.getHyperparameters());
+        JSONArray layersArray = new JSONArray(user.getLayers());
+        res.put("layers", layersArray);
+        System.out.println(res.toString());
+        return res.toString();
+    }
+
+    @GetMapping("/download_layers")
+    @ResponseBody
+    String handleDownloadLayers(Principal principal) {
+        User user = (User) service.loadUserByUsername(principal.getName());
+        return user.getLayers();
+    }
+
+    @GetMapping("/download_hyper_parameters")
+    @ResponseBody
+    String handleDownloadHyperParameters(Principal principal) {
+        User user = (User) service.loadUserByUsername(principal.getName());
+        return user.getHyperparameters();
     }
 
     @GetMapping("/css/{filename}")

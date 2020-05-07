@@ -36,6 +36,14 @@ example.Layer = draw2d.shape.layout.FlexGridLayout.extend({
       this.layerData.activation = "sigmoid";
     } else if (layerType === "dropout") {
       this.layerData.fractionToDrop = 0.0001;
+    } else if (layerType === "conv2d") {
+      this.layerData.activation = "sigmoid";
+      this.layerData.filters = 32;
+      this.layerData.kernelHeight = 3;
+      this.layerData.kernelWidth = 3;
+    } else if (layerType === "maxpooling2d") {
+      this.layerData.poolingHeight = 2;
+      this.layerData.poolingWidth = 2;
     }
 
     let inputLocator = new draw2d.layout.locator.InputPortLocator();
@@ -63,11 +71,20 @@ example.Layer = draw2d.shape.layout.FlexGridLayout.extend({
       y: this.getY().valueOf(),
       type: this.layerData.type
     }
+    console.log(this.layerData.type);
     if (this.layerData.type === "dense") {
       result.units = this.layerData.units;
       result.activation = this.layerData.activation;
     } else if (this.layerData.type === "dropout") {
       result.fraction = this.layerData.fractionToDrop;
+    } else if (this.layerData.type === "conv2d") {
+      result.filters = this.layerData.filters;
+      result.height = this.layerData.kernelHeight;
+      result.width = this.layerData.kernelWidth;
+      result.activation = this.layerData.activation;
+    } else if (this.layerData.type === "maxpooling2d") {
+      result.height = this.layerData.poolingHeight;
+      result.width = this.layerData.poolingWidth;
     }
     return result;
   }

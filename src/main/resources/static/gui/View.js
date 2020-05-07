@@ -70,6 +70,24 @@ example.View = draw2d.Canvas.extend({
                     let command = new draw2d.command.CommandAdd(self, figure, cur.x, cur.y);
                     self.getCommandStack().execute(command);
                     figures.push(figure);
+                } else if (cur.type === "conv2d") {
+                    let figure = new example.Layer();
+                    figure.setType(cur.type);
+                    figure.layerData.kernelHeight = cur.height;
+                    figure.layerData.kernelWidth = cur.width;
+                    figure.layerData.activation = cur.activation;
+                    figure.layerData.filters = cur.filters;
+                    let command = new draw2d.command.CommandAdd(self, figure, cur.x, cur.y);
+                    self.getCommandStack().execute(command);
+                    figures.push(figure);
+                } else if (cur.type === "maxpooling2d") {
+                    let figure = new example.Layer();
+                    figure.setType(cur.type);
+                    figure.layerData.poolingHeight = cur.height;
+                    figure.layerData.poolingWidth = cur.width;
+                    let command = new draw2d.command.CommandAdd(self, figure, cur.x, cur.y);
+                    self.getCommandStack().execute(command);
+                    figures.push(figure);
                 } else {
                     let figure = new example.Layer();
                     figure.setType(cur.type);

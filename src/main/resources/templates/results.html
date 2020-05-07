@@ -7,6 +7,9 @@
 </head>
 <body>
     <button id="download_button"> Download JSON </button>
+    <form action="/download_script" method="get">
+        <input type="submit" value="Download script">
+    </form>
     <div id="content"></div>
     <script type="text/javascript">
         $("#download_button").click(function (event) {

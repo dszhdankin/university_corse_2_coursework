@@ -10,41 +10,49 @@ public class SeqModel {
     private String loss;
     private String optimizer;
     private String modelName;
+    private String dataName;
+    private String labelsName;
+    private int epochs;
+    private int batch;
+    private String sideName;
     private List<String> metrics = new ArrayList<>();
     private List<Layer> layers = new ArrayList<>();
-    private List<String> dependencies = new ArrayList<>();
 
-    public SeqModel(JSONObject seqModel, String modelName) throws JSONException {
+    public SeqModel(JSONObject seqModel, String modelName, String dataName,
+                    String labelsName, String sideName) throws JSONException {
+        this.sideName = sideName;
         this.modelName = modelName;
+        this.dataName = dataName;
+        this.labelsName = labelsName;
         loss = seqModel.getString("loss");
         optimizer = seqModel.getString("optimizer");
-        List metricsBuffer = seqModel.getJSONArray("metrics").toList();
-        for (Object cur : metricsBuffer) {
-            metrics.add(cur.toString());
-        }
-        JSONArray layersBuffer = seqModel.getJSONArray("layers");
+        metrics.add("accuracy");
+        batch = seqModel.getInt("batch");
+        epochs = seqModel.getInt("epochs");
+        JSONArray allLayers = seqModel.getJSONArray("layers");
+        JSONArray neededLayers = allLayers.getJSONArray(0);
         Integer num = 0;
-        for (int i = 0; i < layersBuffer.length(); i++) {
-            JSONObject cur = layersBuffer.getJSONObject(i);
-            layers.add(new DenseLayer(cur, "layer" + num.toString()));
+        while (num < neededLayers.length()) {
+            Layer cur = Layer.CreateLayer(neededLayers.getJSONObject(num), "layer" + num);
+            layers.add(cur);
             num++;
         }
-        dependencies.add("keras.layers");
-        dependencies.add("keras.models");
     }
 
     public String toCode() {
+        if (!layers.get(0).toCode().equals("input") || !layers.get(layers.size() - 1).toCode().equals("output"))
+            return "Error";
         String res = "";
-        for (String cur : dependencies) {
-            res += "import " + cur + "\n";
-        }
-        res += "\n";
         res += modelName + " = " + "keras.models.Sequential()\n\n";
-        for (Layer cur : layers) {
+        for (int i = 1; i < layers.size() - 1; i++) {
+            Layer cur = layers.get(i);
+            if (i == 1)
+                cur.setSideName(sideName);
             res += cur.toCode() + "\n";
         }
         res += "\n";
-        for (Layer cur : layers) {
+        for (int i = 1; i < layers.size() - 1; i++) {
+            Layer cur = layers.get(i);
             res += modelName + ".add(" + cur.getLayerName() + ")\n";
         }
         res += "\n";
@@ -57,7 +65,9 @@ public class SeqModel {
         }
         metricsList.delete(metricsList.length() - 2, metricsList.length());
         metricsList.append("]");
-        res += "metrics=" + metricsList.toString() + ")";
+        res += "metrics=" + metricsList.toString() + ")\n";
+        res += modelName + ".fit(" + dataName + ", " + labelsName + ", ";
+        res += "batch_size=" + batch + ", " + "epochs=" + epochs + ")\n";
         return res;
     }
 }
